@@ -110,7 +110,7 @@ tasks.set('publish', () => {
   global.DEBUG = process.argv.includes('--debug') || false;
   const remote = {
     name: 'azure',
-    url: 'https://<user>@<app>.scm.azurewebsites.net:443/<app>.git', // TODO: Update deployment URL
+    url: 'https://hcngo@craftexerciseintuit.scm.azurewebsites.net:443/craftexerciseintuit.git', // TODO: Update deployment URL
   };
   const opts = { cwd: path.resolve(__dirname, './build'), stdio: ['ignore', 'inherit', 'inherit'] };
   const git = (...args) => new Promise((resolve, reject) => {
