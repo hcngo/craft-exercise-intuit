@@ -35,6 +35,7 @@ namespace Server.Controllers
         {
             // Request a redirect to the external login provider.
             var providerName = _providers.ContainsKey(provider) ? _providers[provider] : provider;
+            _logger.LogInformation(providerName);
             var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(providerName, redirectUrl);
             return Challenge(properties, providerName);
