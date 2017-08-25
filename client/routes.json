@@ -4,7 +4,7 @@
     "view": "./views/home",
     "chunk": "main",
     "data": {
-      "articles": "GET /api/networth"
+      "propertylines": "GET /api/networth"
     }
   },
   {

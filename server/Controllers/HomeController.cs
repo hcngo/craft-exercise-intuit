@@ -18,11 +18,11 @@ namespace Server.Controllers
 {
     public class HomeController : Controller
     {
-        private static IList<PropertyValue> _netValues;
+        private static IList<PropertyLine> _netValues;
         
         static HomeController() {
-          _netValues = new List<PropertyValue>(){
-            new PropertyValue(){Title = "1", Author = "Hey", Url ="http://dfd.com"}
+          _netValues = new List<PropertyLine>(){
+            new PropertyLine(){ Id = "1", Header = "Net Worth", Footer = "", Amount = 23000.00M, ShowAmountInHeader = true, Sublines = new List<PropertyLine>()}
           };
         }
         

@@ -18,7 +18,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      articles: props.articles
+      propertylines: props.propertylines
     };
   }
 
@@ -35,8 +35,8 @@ class Home extends React.Component {
         </p>
         <h4 className="mdl-typography--title">Tracking your Networth</h4>
         <ul>
-          {this.state.articles.map((article, i) =>
-            <li key={i}><a target='_blank' href={article.Url}>{article.Title}</a> by {article.Author}</li>
+          {this.state.propertylines.map((propLine, i) =>
+            <li key={propLine.Id}>{propLine.Header} - {propLine.Footer} - {propLine.Amount} - {propLine.ShowAmountInHeader} - {propLine.Sublines} - </li>
           )}
         </ul>
       </Layout>
@@ -45,7 +45,7 @@ class Home extends React.Component {
 }
 
 Home.propTypes = {
-    articles: PropTypes.array.isRequired,
+    propertylines: PropTypes.array.isRequired,
 };
 
 export default Home;
