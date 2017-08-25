@@ -3,7 +3,10 @@
 // LICENSE.txt file in the root directory of this source tree.
 
 using System.IO;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Server.Models;
 
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +18,14 @@ namespace Server.Controllers
 {
     public class HomeController : Controller
     {
+        private static IList<PropertyValue> _netValues;
+        
+        static HomeController() {
+          _netValues = new List<PropertyValue>(){
+            new PropertyValue(){Title = "1", Author = "Hey", Url ="http://dfd.com"}
+          };
+        }
+        
         private readonly IHostingEnvironment _env;
         private readonly IAntiforgery _antiforgery;
         private dynamic _assets;
@@ -47,6 +58,12 @@ namespace Server.Controllers
             Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
 
             return View();
+        }
+        
+        [HttpGet("api/networth")]
+        public IActionResult GetNetWorth()
+        {
+          return Content(JsonConvert.SerializeObject(_netValues), "application/json");
         }
     }
 }

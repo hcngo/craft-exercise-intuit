@@ -10,14 +10,17 @@
 import React, { PropTypes } from 'react';
 import Layout from '../../components/Layout';
 
-const title = 'ASP.NET Core Starter Kit';
-const link = 'https://github.com/kriasoft/aspnet-starter-kit';
+const title = 'Net Worth Tracker';
+const link = 'https://drive.google.com/open?id=0B5oWb4G-F6rNQTNkSllHYjRNbEJhUjBYRkNEUGpqLXZEYUc0';
 
 class Home extends React.Component {
 
-  static propTypes = {
-    articles: PropTypes.array.isRequired,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      articles: props.articles
+    };
+  }
 
   componentDidMount() {
     document.title = title;
@@ -28,17 +31,21 @@ class Home extends React.Component {
       <Layout>
         <h1 className="mdl-typography--title">Welcome to {title}!</h1>
         <p className="mdl-typography--body-1">
-          For more information visit <a href={link}>{link}</a>
+          For more information visit <a href={link} target='_blank'>{link}</a>
         </p>
-        <h4 className="mdl-typography--title">Articles</h4>
+        <h4 className="mdl-typography--title">Tracking your Networth</h4>
         <ul>
-          {this.props.articles.map((article, i) =>
-            <li key={i}><a href={article.url}>{article.title}</a> by {article.author}</li>
+          {this.state.articles.map((article, i) =>
+            <li key={i}><a target='_blank' href={article.Url}>{article.Title}</a> by {article.Author}</li>
           )}
         </ul>
       </Layout>
     );
   }
 }
+
+Home.propTypes = {
+    articles: PropTypes.array.isRequired,
+};
 
 export default Home;

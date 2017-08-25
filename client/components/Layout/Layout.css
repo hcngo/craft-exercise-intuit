@@ -15,7 +15,7 @@
 
 .ribbon {
   width: 100%;
-  height: 40vh;
+  height: 10vh;
   background-color: #3f51b5;
   background-image: linear-gradient(-225deg, #3db0ef, #5e5bb7);
   flex-shrink: 0;
