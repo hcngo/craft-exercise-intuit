@@ -9,11 +9,16 @@
 
 import React, { PropTypes } from 'react';
 import Layout from '../../components/Layout';
+import PropertyLine from '../../components/PropertyLine';
 
 const title = 'Net Worth Tracker';
 const link = 'https://drive.google.com/open?id=0B5oWb4G-F6rNQTNkSllHYjRNbEJhUjBYRkNEUGpqLXZEYUc0';
 
 class Home extends React.Component {
+  
+  static propTypes = {
+    propertylines: PropTypes.array.isRequired,
+  };
 
   constructor(props) {
     super(props);
@@ -36,16 +41,12 @@ class Home extends React.Component {
         <h4 className="mdl-typography--title">Tracking your Networth</h4>
         <ul>
           {this.state.propertylines.map((propLine, i) =>
-            <li key={propLine.Id}>{propLine.Header} - {propLine.Footer} - {propLine.Amount} - {propLine.ShowAmountInHeader} - {propLine.Sublines} - </li>
+            <PropertyLine {...propLine}></PropertyLine>
           )}
         </ul>
       </Layout>
     );
   }
 }
-
-Home.propTypes = {
-    propertylines: PropTypes.array.isRequired,
-};
 
 export default Home;

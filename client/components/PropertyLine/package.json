@@ -1,0 +1,6 @@
+{
+  "name": "PropertyLine",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./PropertyLine.js"
+}

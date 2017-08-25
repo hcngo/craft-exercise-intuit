@@ -22,7 +22,9 @@ namespace Server.Controllers
         
         static HomeController() {
           _netValues = new List<PropertyLine>(){
-            new PropertyLine(){ Id = "1", Header = "Net Worth", Footer = "", Amount = 23000.00M, ShowAmountInHeader = true, Sublines = new List<PropertyLine>()}
+            new PropertyLine(){ Id = "1", Header = "Net Worth", Footer = "", Amount = 23000.00M, ShowAmountInHeader = true, Sublines = new List<PropertyLine>() {
+              new PropertyLine(){ Id = "2", Header = "Assets", Footer = "", Amount = 23000.00M, ShowAmountInHeader = true, Sublines = new List<PropertyLine>()}
+            }}
           };
         }
         
