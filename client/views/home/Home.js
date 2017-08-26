@@ -41,7 +41,7 @@ class Home extends React.Component {
         <h4 className="mdl-typography--title">Tracking your Networth</h4>
         <ul>
           {this.state.propertylines.map((propLine, i) =>
-            <PropertyLine {...propLine}></PropertyLine>
+            <PropertyLine key={propLine.Id} {...propLine}></PropertyLine>
           )}
         </ul>
       </Layout>

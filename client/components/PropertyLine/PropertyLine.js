@@ -13,11 +13,11 @@ class PropertyLine extends React.Component {
 
   render() {
     return (
-     <li key={this.props.Id}>
+     <li>
       { this.props.Header ?  ( <div> {this.props.Header} { this.props.AmountPos == 1 ? this.props.Amount : ""} </div> ) : "" }
         <ul>
           {this.props.Sublines.map((subLine, i) =>
-            <PropertyLine {...subLine}></PropertyLine>
+            <PropertyLine key={subLine.Id} {...subLine}></PropertyLine>
           )}
         </ul>
       { this.props.Footer ? ( <div>{this.props.Footer} { this.props.AmountPos == 2 ? this.props.Amount : ""} </div>) : ""  }
