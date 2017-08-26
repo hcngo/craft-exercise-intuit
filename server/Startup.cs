@@ -53,6 +53,8 @@ namespace Server
                 .AddViews()
                 .AddRazorViewEngine()
                 .AddJsonFormatters();
+          
+            services.AddSingleton<IConfiguration>(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory factory)

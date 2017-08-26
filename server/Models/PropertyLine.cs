@@ -9,11 +9,14 @@ namespace Server.Models
 {
     public class PropertyLine
     {
+      public enum AmountLocation { None, InHeader, InFooter};
+      
       public string Id;
       public string Header;
       public string Footer;
       public decimal Amount;
-      public bool ShowAmountInHeader;
+      public bool IsAmountCalculated;
+      public AmountLocation AmountPos;
       public IList<PropertyLine> Sublines;
     }
 }
