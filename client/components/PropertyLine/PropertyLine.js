@@ -9,18 +9,47 @@
 
 import React, { PropTypes } from 'react';
 
+class PropertyDisplayLine extends React.Component {
+
+  static propTypes = {
+    Text: PropTypes.string,
+    DisplayAmountFlag: PropTypes.bool,
+    Amount: PropTypes.number,
+    IsAmountCalculated: PropTypes.bool
+  };
+
+  render() {
+    if (!(this.props.Text && this.props.Text.trim().length)){
+      return (<span></span>);
+    }
+    if (this.props.DisplayAmountFlag){
+      var amountElement = this.props.IsAmountCalculated ? (<span> {this.props.Amount} </span>) : (<input defaultValue={this.props.Amount}/>);
+      return (<div> {this.props.Text} {amountElement} </div>);
+    }
+    return (<div> {this.props.Text} </div>);
+  }
+}
+
 class PropertyLine extends React.Component {
+
+  static propTypes = {
+    Header: PropTypes.string,
+    AmountPos: PropTypes.number,
+    Amount: PropTypes.number,
+    Footer: PropTypes.string,
+    IsAmountCalculated: PropTypes.bool
+  };
 
   render() {
     return (
      <li>
-      { this.props.Header ?  ( <div> {this.props.Header} { this.props.AmountPos == 1 ? this.props.Amount : ""} </div> ) : "" }
+      <PropertyDisplayLine Text={this.props.Header} DisplayAmountFlag={this.props.AmountPos == 1} {...this.props}></PropertyDisplayLine>
         <ul>
           {this.props.Sublines.map((subLine, i) =>
             <PropertyLine key={subLine.Id} {...subLine}></PropertyLine>
           )}
         </ul>
-      { this.props.Footer ? ( <div>{this.props.Footer} { this.props.AmountPos == 2 ? this.props.Amount : ""} </div>) : ""  }
+        <PropertyDisplayLine Text={this.props.Footer} DisplayAmountFlag={this.props.AmountPos == 2} {...this.props}></PropertyDisplayLine>
       </li>
     );
   }
