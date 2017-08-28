@@ -8,14 +8,17 @@
  */
 
 import React, { PropTypes } from 'react';
+import { AMOUNTLOCATION } from '../../utils/consts';
 
 class PropertyDisplayLine extends React.Component {
 
   static propTypes = {
+    Id: PropTypes.string,
     Text: PropTypes.string,
     DisplayAmountFlag: PropTypes.bool,
     Amount: PropTypes.number,
-    IsAmountCalculated: PropTypes.bool
+    IsAmountCalculated: PropTypes.bool,
+    handleChange: PropTypes.func
   };
 
   render() {
@@ -23,7 +26,7 @@ class PropertyDisplayLine extends React.Component {
       return (<span></span>);
     }
     if (this.props.DisplayAmountFlag){
-      var amountElement = this.props.IsAmountCalculated ? (<span> {this.props.Amount} </span>) : (<input defaultValue={this.props.Amount}/>);
+      var amountElement = this.props.IsAmountCalculated ? (<span> {this.props.Amount} </span>) : (<input value={this.props.Amount} onChange={(e) => this.props.handleChange(e, this.props.Id)}/>);
       return (<div> {this.props.Text} {amountElement} </div>);
     }
     return (<div> {this.props.Text} </div>);
@@ -37,19 +40,20 @@ class PropertyLine extends React.Component {
     AmountPos: PropTypes.number,
     Amount: PropTypes.number,
     Footer: PropTypes.string,
-    IsAmountCalculated: PropTypes.bool
+    IsAmountCalculated: PropTypes.bool,
+    handleChange: PropTypes.func
   };
 
   render() {
     return (
      <li>
-      <PropertyDisplayLine Text={this.props.Header} DisplayAmountFlag={this.props.AmountPos == 1} {...this.props}></PropertyDisplayLine>
+      <PropertyDisplayLine Text={this.props.Header} DisplayAmountFlag={this.props.AmountPos == AMOUNTLOCATION.Header } {...this.props}></PropertyDisplayLine>
         <ul>
           {this.props.Sublines.map((subLine, i) =>
-            <PropertyLine key={subLine.Id} {...subLine}></PropertyLine>
+            <PropertyLine key={subLine.Id} {...subLine} handleChange={this.props.handleChange}></PropertyLine>
           )}
         </ul>
-        <PropertyDisplayLine Text={this.props.Footer} DisplayAmountFlag={this.props.AmountPos == 2} {...this.props}></PropertyDisplayLine>
+        <PropertyDisplayLine Text={this.props.Footer} DisplayAmountFlag={this.props.AmountPos == AMOUNTLOCATION.Footer } {...this.props}></PropertyDisplayLine>
       </li>
     );
   }

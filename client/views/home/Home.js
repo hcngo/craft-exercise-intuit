@@ -25,6 +25,20 @@ class Home extends React.Component {
     this.state = {
       propertylines: props.propertylines
     };
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e, lineId) {
+    var newVal = e.target.value;
+    var layers = lineId.split(".");
+    var newState = Object.assign({}, this.state);
+    var theLine = { Sublines: newState.propertylines };
+    layers.forEach(function(level) {
+      var nLevel = parseInt(level);
+      theLine = theLine.Sublines[nLevel - 1];
+    });
+    theLine.Amount = parseInt(newVal);
+    this.setState(prevState => (newState));
   }
 
   componentDidMount() {
@@ -41,7 +55,7 @@ class Home extends React.Component {
         <h4 className="mdl-typography--title">Tracking your Networth</h4>
         <ul>
           {this.state.propertylines.map((propLine, i) =>
-            <PropertyLine key={propLine.Id} {...propLine}></PropertyLine>
+            <PropertyLine key={propLine.Id} {...propLine} handleChange={this.handleChange}></PropertyLine>
           )}
         </ul>
       </Layout>
