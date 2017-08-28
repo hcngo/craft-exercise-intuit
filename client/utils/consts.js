@@ -4,4 +4,6 @@ const AMOUNTLOCATION = {
     Footer: 2
 };
 
-export { AMOUNTLOCATION };
+const POST_NET_WORTH_URL = "/api/networth";
+
+export { AMOUNTLOCATION, POST_NET_WORTH_URL};

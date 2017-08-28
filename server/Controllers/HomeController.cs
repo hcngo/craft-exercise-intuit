@@ -88,5 +88,17 @@ namespace Server.Controllers
               
           return Content(JsonConvert.SerializeObject(_netValues), "application/json");
         }
+        
+        [HttpPost("api/networth")]
+        public IActionResult PostNetWorth([FromBody] IList<PropertyLine> newLines)
+        {
+            if (_netValues is null){
+              lock (_lock){
+                _netValues = _ConvertInitialData(_configuration.GetSection("InitialData"));
+              }
+            }
+              
+          return Content(JsonConvert.SerializeObject(newLines), "application/json");
+        }
     }
 }

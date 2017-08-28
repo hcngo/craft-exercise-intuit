@@ -10,6 +10,7 @@
 import React, { PropTypes } from 'react';
 import Layout from '../../components/Layout';
 import PropertyLine from '../../components/PropertyLine';
+import {dispatch, homeReducer} from './HomeReducer';
 
 const title = 'Net Worth Tracker';
 const link = 'https://drive.google.com/open?id=0B5oWb4G-F6rNQTNkSllHYjRNbEJhUjBYRkNEUGpqLXZEYUc0';
@@ -29,16 +30,8 @@ class Home extends React.Component {
   }
 
   handleChange(e, lineId) {
-    var newVal = e.target.value;
-    var layers = lineId.split(".");
-    var newState = Object.assign({}, this.state);
-    var theLine = { Sublines: newState.propertylines };
-    layers.forEach(function(level) {
-      var nLevel = parseInt(level);
-      theLine = theLine.Sublines[nLevel - 1];
-    });
-    theLine.Amount = parseInt(newVal);
-    this.setState(prevState => (newState));
+    var action = {type: 'SUBMIT', lineId: lineId, value: e.target.value};
+    dispatch.call(this, action);
   }
 
   componentDidMount() {
