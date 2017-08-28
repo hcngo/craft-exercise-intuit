@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Server.Models;
+using Server.ApplicationServices;
 
 namespace Server
 {
@@ -55,6 +56,7 @@ namespace Server
                 .AddJsonFormatters();
           
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddTransient<INetWorthTracking, NetWorthTracking>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory factory)

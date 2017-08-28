@@ -26,7 +26,7 @@ class PropertyDisplayLine extends React.Component {
       return (<span></span>);
     }
     if (this.props.DisplayAmountFlag){
-      var amountElement = this.props.IsAmountCalculated ? (<span> {this.props.Amount} </span>) : (<input value={this.props.Amount} onChange={(e) => this.props.handleChange(e, this.props.Id)}/>);
+      var amountElement = this.props.IsAmountCalculated ? (<span> {this.props.Amount} </span>) : (<input defaultValue={this.props.Amount} onBlur={(e) => this.props.handleChange(e, this.props.Id)}/>);
       return (<div> {this.props.Text} {amountElement} </div>);
     }
     return (<div> {this.props.Text} </div>);
