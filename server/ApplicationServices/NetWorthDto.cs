@@ -17,5 +17,7 @@ namespace Server.ApplicationServices
     {
       public IList<PropertyLine> Items;
       public int Version;
+
+      public Tuple<bool,string> Result;
     }
 }

@@ -9,51 +9,38 @@
 
 import React, { PropTypes } from 'react';
 import { AMOUNTLOCATION } from '../../utils/consts';
-
-class PropertyDisplayLine extends React.Component {
-
-  static propTypes = {
-    Id: PropTypes.string,
-    Text: PropTypes.string,
-    DisplayAmountFlag: PropTypes.bool,
-    Amount: PropTypes.number,
-    IsAmountCalculated: PropTypes.bool,
-    handleChange: PropTypes.func
-  };
-
-  render() {
-    if (!(this.props.Text && this.props.Text.trim().length)){
-      return (<span></span>);
-    }
-    if (this.props.DisplayAmountFlag){
-      var amountElement = this.props.IsAmountCalculated ? (<span> {this.props.Amount} </span>) : (<input defaultValue={this.props.Amount} onBlur={(e) => this.props.handleChange(e, this.props.Id)}/>);
-      return (<div> {this.props.Text} {amountElement} </div>);
-    }
-    return (<div> {this.props.Text} </div>);
-  }
-}
+import PropertyDisplayLine from './PropertyDisplayLine';
 
 class PropertyLine extends React.Component {
 
   static propTypes = {
-    Header: PropTypes.string,
-    AmountPos: PropTypes.number,
-    Amount: PropTypes.number,
-    Footer: PropTypes.string,
-    IsAmountCalculated: PropTypes.bool,
-    handleChange: PropTypes.func
+    Header: PropTypes.string.isRequired,
+    AmountPos: PropTypes.number.isRequired,
+    Amount: PropTypes.number.isRequired,
+    Footer: PropTypes.string.isRequired,
+    IsAmountCalculated: PropTypes.bool.isRequired,
+    Sublines: PropTypes.arrayOf.isRequired,
+    handleChange: PropTypes.func.isRequired,
   };
 
   render() {
     return (
-     <li>
-      <PropertyDisplayLine Text={this.props.Header} DisplayAmountFlag={this.props.AmountPos == AMOUNTLOCATION.Header } {...this.props}></PropertyDisplayLine>
+      <li>
+        <PropertyDisplayLine
+          Text={this.props.Header}
+          DisplayAmountFlag={this.props.AmountPos === AMOUNTLOCATION.Header}
+          {...this.props}
+        />
         <ul>
-          {this.props.Sublines.map((subLine, i) =>
-            <PropertyLine key={subLine.Id} {...subLine} handleChange={this.props.handleChange}></PropertyLine>
+          {this.props.Sublines.map(subLine =>
+            <PropertyLine key={subLine.Id} {...subLine} handleChange={this.props.handleChange} />,
           )}
         </ul>
-        <PropertyDisplayLine Text={this.props.Footer} DisplayAmountFlag={this.props.AmountPos == AMOUNTLOCATION.Footer } {...this.props}></PropertyDisplayLine>
+        <PropertyDisplayLine
+          Text={this.props.Footer}
+          DisplayAmountFlag={this.props.AmountPos === AMOUNTLOCATION.Footer}
+          {...this.props}
+        />
       </li>
     );
   }

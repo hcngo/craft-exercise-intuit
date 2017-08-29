@@ -16,7 +16,7 @@ namespace Server.ApplicationServices
     public interface INetWorthTracking
     {
       IList<PropertyLine> GetInitialData(IConfigurationSection arrayOfLines);
-      
-      void ProcessNewLines(IList<PropertyLine> newLines);
+
+      void ProcessNewLines(NetWorthDto dto);
     }
 }

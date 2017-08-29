@@ -22,8 +22,8 @@ namespace Server.Controllers
     public class HomeController : Controller
     {
         private static Object _lock = new Object();
-        private static IList<PropertyLine> _netValues;
-        
+        private static NetWorthDto _netValues;
+
         private readonly INetWorthTracking _netWorthTracking;
         private readonly IHostingEnvironment _env;
         private readonly IAntiforgery _antiforgery;
@@ -61,30 +61,50 @@ namespace Server.Controllers
 
             return View();
         }
-        
-        
+
+
         [HttpGet("api/networth")]
         public IActionResult GetNetWorth()
         {
-            if (_netValues is null){
-              lock (_lock){
-                _netValues = _netWorthTracking.GetInitialData(_configuration.GetSection("InitialData"));
-              }
+            if (_netValues is null)
+            {
+                lock (_lock)
+                {
+                    _netValues = new NetWorthDto(){
+                        Items = _netWorthTracking.GetInitialData(_configuration.GetSection("InitialData")),
+                        Version = 1,
+                        Result = new Tuple<bool, string>(true, "")
+                    };
+                }
             }
-              
-          return Content(JsonConvert.SerializeObject(_netValues), "application/json");
+            _netValues.Result = new Tuple<bool,string>(true, "");
+            return Content(JsonConvert.SerializeObject(_netValues), "application/json");
         }
-        
+
         [HttpPost("api/networth")]
-        public IActionResult PostNetWorth([FromBody] IList<PropertyLine> newLines)
+        public IActionResult PostNetWorth([FromBody] NetWorthDto dto)
         {
-          lock (_lock) {
-            _netWorthTracking.ProcessNewLines(newLines);
-            _netValues = newLines;
-//             Thread.Sleep(3000);
-          }
-              
-          return Content(JsonConvert.SerializeObject(_netValues), "application/json");
+            var result = dto;
+            lock (_lock)
+            {
+                if (_netValues is null)
+                {
+                    dto.Result = new Tuple<bool, string>(false, "Net Worth Tracker was not initiated. Please load it first.");
+                }
+                else if (_netValues.Version > dto.Version)
+                {
+                    dto.Result = new Tuple<bool, string>(false, "The Net Worth Tracker had been updated earlier. Please reload and make your changes again.");
+                }
+                else
+                {
+                    _netWorthTracking.ProcessNewLines(dto);
+                    dto.Result = new Tuple<bool,string>(true, "The Net Worth Tracker has been successfully updated.");
+                    _netValues = dto;
+                    result = dto;
+                }
+            }
+
+            return Content(JsonConvert.SerializeObject(result), "application/json");
         }
     }
 }

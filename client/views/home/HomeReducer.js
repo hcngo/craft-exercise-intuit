@@ -1,47 +1,51 @@
-import {POST_NET_WORTH_URL} from '../../utils/consts';
+import { POST_NET_WORTH_URL } from '../../utils/consts';
 
 const homeReducer = (state, action) => {
+  let newState;
   switch (action.type) {
     case 'REPLACE':
-      var newState = Object.assign({}, state);
-      newState.propertylines = action.lines;
-      return newState;
+      newState = Object.assign({}, state);
+      newState.dataStore = action.dataStore;
+      break;
+    case 'ERROR':
+      newState = Object.assign({}, state);
+      newState.dataStore.Result.Item1 = false;
+      newState.dataStore.Result.Item2 = action.exception.toString();
+      break;
     default:
-      return state;
+      newState = state;
+      break;
   }
-}
+  return newState;
+};
 
-function dispatch(action){
-  var self = this;
-  if (action.type == 'SUBMIT'){
-    var layers = action.lineId.split(".");
-    var newState = Object.assign({}, this.state);
-    var theLine = { Sublines: newState.propertylines };
-    layers.forEach(function(level) {
-      var nLevel = parseInt(level);
+function dispatch(action) {
+  const self = this;
+  if (action.type === 'SUBMIT') {
+    const layers = action.lineId.split('.');
+    const newState = Object.assign({}, this.state);
+    let theLine = { Sublines: newState.dataStore.Items };
+    layers.forEach((level) => {
+      const nLevel = parseInt(level, 10);
       theLine = theLine.Sublines[nLevel - 1];
     });
-    theLine.Amount = parseInt(action.value);
-    
+    theLine.Amount = parseInt(action.value, 10);
+
     fetch(POST_NET_WORTH_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newState.propertylines)
+      body: JSON.stringify(newState.dataStore),
     })
-    .then(function(response) {
-      return response.json()
-    }).then(function(json) {
-      console.log('parsed json', json)
-      self.setState(prevState => homeReducer(prevState, {type: 'REPLACE', lines: json}));
-    }).catch(function(ex) {
-      console.log('parsing failed', ex)
+    .then(response => response.json())
+    .then((json) => {
+      self.setState(prevState => homeReducer(prevState, { type: 'REPLACE', dataStore: json }));
+    }).catch((ex) => {
+      self.setState(prevState => homeReducer(prevState, { type: 'ERROR', exception: ex }));
     });
-    
-    
   }
 }
 
-export {dispatch};
+export default dispatch;
 

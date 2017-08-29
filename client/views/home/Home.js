@@ -10,45 +10,50 @@
 import React, { PropTypes } from 'react';
 import Layout from '../../components/Layout';
 import PropertyLine from '../../components/PropertyLine';
-import {dispatch, homeReducer} from './HomeReducer';
+import dispatch from './HomeReducer';
+import s from './Home.css';
 
 const title = 'Net Worth Tracker';
 const link = 'https://drive.google.com/open?id=0B5oWb4G-F6rNQTNkSllHYjRNbEJhUjBYRkNEUGpqLXZEYUc0';
 
 class Home extends React.Component {
-  
+
   static propTypes = {
-    propertylines: PropTypes.array.isRequired,
+    dataStore: PropTypes.shape({
+      Items: PropTypes.array.isRequired, Version: PropTypes.number.isRequired, Result: PropTypes.any
+    }).isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      propertylines: props.propertylines
+      dataStore: props.dataStore,
     };
     this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(e, lineId) {
-    var action = {type: 'SUBMIT', lineId: lineId, value: e.target.value};
-    dispatch.call(this, action);
   }
 
   componentDidMount() {
     document.title = title;
   }
 
+  handleChange(e, lineId) {
+    const action = { type: 'SUBMIT', lineId, value: e.target.value };
+    dispatch.call(this, action);
+  }
+
   render() {
     return (
       <Layout>
-        <h1 className="mdl-typography--title">Welcome to {title}!</h1>
         <p className="mdl-typography--body-1">
-          For more information visit <a href={link} target='_blank'>{link}</a>
+          <span className="mdl-typography--title">Welcome to {title}!</span>
+          For more information visit <a href={link} target="_blank">{link}</a>
         </p>
-        <h4 className="mdl-typography--title">Tracking your Networth</h4>
+        <p>
+          <span className={this.state.dataStore.Result.Item1 ? s.success : s.error}>{this.state.dataStore.Result.Item2}</span>
+        </p>
         <ul>
-          {this.state.propertylines.map((propLine, i) =>
-            <PropertyLine key={propLine.Id} {...propLine} handleChange={this.handleChange}></PropertyLine>
+          {this.state.dataStore.Items.map(propLine =>
+            <PropertyLine key={propLine.Id} {...propLine} handleChange={this.handleChange} />,
           )}
         </ul>
       </Layout>

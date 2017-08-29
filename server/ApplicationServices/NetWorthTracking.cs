@@ -15,7 +15,6 @@ namespace Server.ApplicationServices
 {
     public class NetWorthTracking : INetWorthTracking
     {
-    
       public IList<PropertyLine> GetInitialData(IConfigurationSection arrayOfLines) {
         var lines = new List<PropertyLine>();
         foreach (IConfigurationSection section in arrayOfLines.GetChildren())
@@ -36,13 +35,14 @@ namespace Server.ApplicationServices
         }
         return lines;
       }
-      
-      public void ProcessNewLines(IList<PropertyLine> newLines) {
-        foreach (var line in newLines) {
+
+      public void ProcessNewLines(NetWorthDto dto) {
+        foreach (var line in dto.Items) {
           processLine(line);
         }
+        dto.Version += 1;
       }
-      
+
       private void processLine(PropertyLine line){
         if (line.IsAmountCalculated){
           line.Amount = 0.00M;
@@ -62,7 +62,7 @@ namespace Server.ApplicationServices
             }
           }
         } else {
-          
+
         }
       }
     }
