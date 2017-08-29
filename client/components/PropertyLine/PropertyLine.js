@@ -19,7 +19,7 @@ class PropertyLine extends React.Component {
     Amount: PropTypes.number.isRequired,
     Footer: PropTypes.string.isRequired,
     IsAmountCalculated: PropTypes.bool.isRequired,
-    Sublines: PropTypes.arrayOf.isRequired,
+    Sublines: PropTypes.array.isRequired,
     handleChange: PropTypes.func.isRequired,
   };
 

@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 using Server.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Antiforgery;
@@ -15,9 +16,8 @@ namespace Server.ApplicationServices
 {
     public class NetWorthDto
     {
-      public IList<PropertyLine> Items;
-      public int Version;
-
-      public Tuple<bool,string> Result;
+      public IList<PropertyLine> Items {get; set;}
+      public int Version {get;set;}
+      public Tuple<bool,string> Result {get; set;}
     }
 }

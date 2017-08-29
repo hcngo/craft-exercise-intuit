@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,15 +12,18 @@ namespace Server.Models
     {
       public enum AmountLocation { None, InHeader, InFooter};
       public enum AmountOperation { None, Plus, Subtract };
-      
-      public string Id;
-      public AmountOperation AmountOperand;
-      public string Header;
-      public string Footer;
-      public decimal Amount;
-      public bool IsAmountCalculated;
-      public AmountLocation AmountPos;
-      public IList<PropertyLine> Sublines;
+
+      public string Id {get; set;}
+      public AmountOperation AmountOperand {get; set;}
+      public string Header {get; set;}
+      public string Footer {get; set;}
+      [Required]
+      [Range(0, 100000000.00)]
+      public decimal? Amount {get; set;}
+      public bool IsAmountCalculated {get; set;}
+      public AmountLocation AmountPos {get; set;}
+      public IList<PropertyLine> Sublines {get; set;}
+      public string Message {get;set;}
 
       public override bool Equals(object obj){
         if (obj == null || GetType() != obj.GetType())

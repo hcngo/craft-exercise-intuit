@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -94,6 +95,10 @@ namespace Server.Controllers
                 else if (_netValues.Version > dto.Version)
                 {
                     dto.Result = new Tuple<bool, string>(false, "The Net Worth Tracker had been updated earlier. Please reload and make your changes again.");
+                } else if (!ModelState.IsValid){
+                    foreach(var k in ModelState){
+                        var errorMessage = String.Join(" - ", k.Value.Errors.Items.Select(t => t.ErrorMessage));
+                    }
                 }
                 else
                 {
