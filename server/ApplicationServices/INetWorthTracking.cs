@@ -17,6 +17,6 @@ namespace Server.ApplicationServices
     {
       IList<PropertyLine> GetInitialData(IConfigurationSection arrayOfLines);
       
-      IList<PropertyLine> ProcessNewLines(IList<PropertyLine> newLines);
+      void ProcessNewLines(IList<PropertyLine> newLines);
     }
 }

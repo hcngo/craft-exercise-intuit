@@ -37,11 +37,10 @@ namespace Server.ApplicationServices
         return lines;
       }
       
-      public IList<PropertyLine> ProcessNewLines(IList<PropertyLine> newLines) {
+      public void ProcessNewLines(IList<PropertyLine> newLines) {
         foreach (var line in newLines) {
           processLine(line);
         }
-        return newLines;
       }
       
       private void processLine(PropertyLine line){

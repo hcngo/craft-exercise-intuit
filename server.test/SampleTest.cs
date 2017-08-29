@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using Server.ApplicationServices;
 
 namespace server.test
 {
@@ -16,11 +17,19 @@ namespace server.test
     public class SampleTest
     {
         [Fact]
-        public void PassingTest()
+        public void NetWorthTrackingTest()
         {
           var config = GetConfigBuilder();
-          var section = config.GetSection("InitialData").GetChildren().ToList()[0].GetSection("Id").Value;
-          Assert.NotNull(section);
+          var netWorthTrackingServ = new NetWorthTracking();
+          var lines = netWorthTrackingServ.GetInitialData(config.GetSection("InitialData"));
+          var newLines = netWorthTrackingServ.GetInitialData(config.GetSection("InitialData"));
+          netWorthTrackingServ.ProcessNewLines(newLines);
+          Assert.True(lines.Count == newLines.Count);
+          var result = true;
+          for(var i = 0; i < lines.Count; i++){
+              result = result && lines[i].Equals(newLines[i]);
+          }
+          Assert.True(result);
         }
       
         private IConfiguration GetConfigBuilder(){
@@ -30,17 +39,6 @@ namespace server.test
             .AddJsonFile($"appsettings.json", optional: true)
             .Build();
           return config;
-        }
-
-        [Fact]
-        public void GetInitialData()
-        {
-            Assert.Equal(5, Add(2, 2));
-        }
-
-        int Add(int x, int y)
-        {
-            return x + y;
         }
     }
 }

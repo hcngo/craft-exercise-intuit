@@ -78,7 +78,8 @@ namespace Server.Controllers
         public IActionResult PostNetWorth([FromBody] IList<PropertyLine> newLines)
         {
           lock (_lock) {
-            _netValues = _netWorthTracking.ProcessNewLines(newLines);
+            _netWorthTracking.ProcessNewLines(newLines);
+            _netValues = newLines;
           }
               
           return Content(JsonConvert.SerializeObject(_netValues), "application/json");
