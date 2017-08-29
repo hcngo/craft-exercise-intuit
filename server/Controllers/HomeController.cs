@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Server.Models;
 using Server.ApplicationServices;
@@ -80,6 +81,7 @@ namespace Server.Controllers
           lock (_lock) {
             _netWorthTracking.ProcessNewLines(newLines);
             _netValues = newLines;
+//             Thread.Sleep(3000);
           }
               
           return Content(JsonConvert.SerializeObject(_netValues), "application/json");
