@@ -18,5 +18,7 @@ namespace Server.ApplicationServices
       IList<PropertyLine> GetInitialData(IConfigurationSection arrayOfLines);
 
       void ProcessNewLines(NetWorthDto dto);
+
+      void ClearErrorMessages(NetWorthDto dto);
     }
 }

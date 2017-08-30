@@ -113,6 +113,8 @@ namespace Server.Controllers
         }
 
         private void PopulateErrors(NetWorthDto dto){
+            // Clear previous error messages
+            _netWorthTracking.ClearErrorMessages(dto);
             var messagePropName = "Message";
             foreach(var k in ModelState){
                 var errorMessage = String.Join(" - ", k.Value.Errors.ToList().Select(t => t.ErrorMessage));

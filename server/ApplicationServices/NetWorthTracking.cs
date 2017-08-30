@@ -36,6 +36,19 @@ namespace Server.ApplicationServices
         return lines;
       }
 
+      public void ClearErrorMessages(NetWorthDto dto){
+        foreach (var line in dto.Items) {
+          ClearMessageLine(line);
+        }
+      }
+
+      private void ClearMessageLine(PropertyLine line){
+          line.Message = "";
+          foreach(var subL in line.Sublines){
+              ClearMessageLine(subL);
+          }
+      }
+
       public void ProcessNewLines(NetWorthDto dto) {
         foreach (var line in dto.Items) {
           processLine(line);
