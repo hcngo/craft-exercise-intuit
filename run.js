@@ -171,7 +171,7 @@ tasks.set('start', () => {
             stdio: ['ignore', 'pipe', 'inherit'],
             env: Object.assign({}, process.env, {
               ASPNETCORE_ENVIRONMENT: 'Development',
-              ASPNETCORE_URLS: 'http:/0.0.0.0:2999',
+              ASPNETCORE_URLS: 'http://127.0.0.1:2999',
             }),
           };
           cp.spawn('dotnet', ['watch', 'run'], options).stdout.on('data', data => {
@@ -181,7 +181,7 @@ tasks.set('start', () => {
               // For more information visit https://browsersync.io/docs/options
               require('browser-sync').create().init({
                 proxy: {
-                  target: 'http:/0.0.0.0:2999',
+                  target: 'http://127.0.0.1:2999',
                   middleware: [
                     webpackDevMiddleware,
                     require('webpack-hot-middleware')(compiler),
