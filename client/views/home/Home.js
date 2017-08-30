@@ -11,6 +11,7 @@ import React, { PropTypes } from 'react';
 import Layout from '../../components/Layout';
 import PropertyLine from '../../components/PropertyLine';
 import dispatch from './HomeReducer';
+import Button from '../../components/Button';
 import s from './Home.css';
 
 const title = 'Net Worth Tracker';
@@ -28,8 +29,11 @@ class Home extends React.Component {
     super(props);
     this.state = {
       dataStore: props.dataStore,
+      editMode: false,
+      snapShot: null,
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleEditClick = this.handleButtonClick.bind(this);
   }
 
   componentDidMount() {
@@ -41,6 +45,12 @@ class Home extends React.Component {
     dispatch.call(this, action);
   }
 
+  handleButtonClick(e, type) {
+    const action = { type };
+    dispatch.call(this, action);
+    e.preventDefault();
+  }
+
   render() {
     return (
       <Layout>
@@ -48,9 +58,22 @@ class Home extends React.Component {
           <span className="mdl-typography--title">Welcome to {title}!</span>
           For more information visit <a href={link} target="_blank">{link}</a>
         </p>
-        <p>
-          <span className={this.state.dataStore.Result.Item1 ? s.success : s.error}>{this.state.dataStore.Result.Item2}</span>
-        </p>
+        <h7 className={this.state.dataStore.Result.Item1 ? s.success : s.error}>
+          {this.state.dataStore.Result.Item2}
+        </h7>
+        <div>
+          { this.state.editMode ?
+            (<span>
+              <Button onClick={(e) => { this.handleEditClick(e, 'SAVE'); }}>Save</Button>
+              <Button onClick={(e) => { this.handleEditClick(e, 'CANCEL'); }}>Cancel</Button>
+            </span>) :
+            (<Button
+              onClick={(e) => { this.handleEditClick(e, 'EDIT'); }}
+            >
+              Edit
+            </Button>)
+          }
+        </div>
         <table className={s.lineTable}>
           <tbody>
             {this.state.dataStore.Items.map(propLine =>

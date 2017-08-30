@@ -13,6 +13,20 @@ const homeReducer = (state, action) => {
       newState.dataStore.Result.Item1 = false;
       newState.dataStore.Result.Item2 = action.exception.toString();
       break;
+    case 'EDIT':
+      newState = Object.assign({}, state);
+      newState.editMode = true;
+      newState.snapShot = state;
+      break;
+    case 'SAVE':
+      newState = Object.assign({}, state);
+      newState.editMode = true;
+      newState.snapShot = state;
+      break;
+    case 'CANCEL':
+      newState = state.snapShot;
+      newState.snapShot = null;
+      break;
     default:
       newState = state;
       break;
@@ -51,6 +65,8 @@ function dispatch(action) {
     }).catch((ex) => {
       self.setState(prevState => homeReducer(prevState, { type: 'ERROR', exception: ex }));
     });
+  } else {
+    self.setState(prevState => homeReducer(prevState, action));
   }
 }
 
