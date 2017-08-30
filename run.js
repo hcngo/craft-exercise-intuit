@@ -177,7 +177,7 @@ tasks.set('start', () => {
             stdio: ['ignore', 'pipe', 'inherit'],
             env: Object.assign({}, process.env, {
               ASPNETCORE_ENVIRONMENT: 'Development',
-              ASPNETCORE_URLS: 'http://0.0.0.0:2999',
+              ASPNETCORE_URLS: 'http:/0.0.0.0:2999',
             }),
           };
           cp.spawn('dotnet', ['watch', 'run'], options).stdout.on('data', data => {
