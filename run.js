@@ -83,16 +83,11 @@ tasks.set('appsettings', () => new Promise(resolve => {
 // -----------------------------------------------------------------------------
 tasks.set('build', () => {
   global.DEBUG = process.argv.includes('--debug') || false;
-  global.SERVERONLY = process.argv.includes('--server') || false;
-  let result = Promise.resolve();
-  if (!global.SERVERONLY) {
-    result = result
-      .then(() => run('clean'))
-      .then(() => run('bundle'))
-      .then(() => run('copy'))
-      .then(() => run('appsettings'));
-  }
-  result
+  return Promise.resolve()
+    .then(() => run('clean'))
+    .then(() => run('bundle'))
+    .then(() => run('copy'))
+    .then(() => run('appsettings'))
     .then(() => new Promise((resolve, reject) => {
       const options = { stdio: ['ignore', 'inherit', 'inherit'] };
       const config = global.DEBUG ? 'Debug' : 'Release';
@@ -105,7 +100,6 @@ tasks.set('build', () => {
         }
       });
     }));
-  return result;
 });
 
 
@@ -187,7 +181,7 @@ tasks.set('start', () => {
               // For more information visit https://browsersync.io/docs/options
               require('browser-sync').create().init({
                 proxy: {
-                  target: 'http://0.0.0.0:2999',
+                  target: 'http:/0.0.0.0:2999',
                   middleware: [
                     webpackDevMiddleware,
                     require('webpack-hot-middleware')(compiler),
