@@ -16,10 +16,11 @@ class PropertyLine extends React.Component {
   static propTypes = {
     Header: PropTypes.string.isRequired,
     AmountPos: PropTypes.number.isRequired,
-    Amount: PropTypes.number.isRequired,
+    Amount: PropTypes.number,
     Footer: PropTypes.string.isRequired,
     IsAmountCalculated: PropTypes.bool.isRequired,
     Sublines: PropTypes.array.isRequired,
+    Message: PropTypes.string.isRequired,
     handleChange: PropTypes.func.isRequired,
   };
 

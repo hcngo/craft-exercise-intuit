@@ -1,4 +1,5 @@
 import { POST_NET_WORTH_URL } from '../../utils/consts';
+import { filterFloat } from '../../utils/funcs';
 
 const homeReducer = (state, action) => {
   let newState;
@@ -29,7 +30,7 @@ function dispatch(action) {
       const nLevel = parseInt(level, 10);
       theLine = theLine.Sublines[nLevel - 1];
     });
-    theLine.Amount = parseInt(action.value, 10);
+    theLine.Amount = filterFloat(action.value);
 
     fetch(POST_NET_WORTH_URL, {
       method: 'POST',

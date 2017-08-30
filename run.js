@@ -83,11 +83,16 @@ tasks.set('appsettings', () => new Promise(resolve => {
 // -----------------------------------------------------------------------------
 tasks.set('build', () => {
   global.DEBUG = process.argv.includes('--debug') || false;
-  return Promise.resolve()
-    .then(() => run('clean'))
-    .then(() => run('bundle'))
-    .then(() => run('copy'))
-    .then(() => run('appsettings'))
+  global.SERVERONLY = process.argv.includes('--server') || false;
+  let result = Promise.resolve();
+  if (!global.SERVERONLY) {
+    result = result
+      .then(() => run('clean'))
+      .then(() => run('bundle'))
+      .then(() => run('copy'))
+      .then(() => run('appsettings'));
+  }
+  result
     .then(() => new Promise((resolve, reject) => {
       const options = { stdio: ['ignore', 'inherit', 'inherit'] };
       const config = global.DEBUG ? 'Debug' : 'Release';
@@ -100,6 +105,7 @@ tasks.set('build', () => {
         }
       });
     }));
+  return result;
 });
 
 
@@ -171,7 +177,7 @@ tasks.set('start', () => {
             stdio: ['ignore', 'pipe', 'inherit'],
             env: Object.assign({}, process.env, {
               ASPNETCORE_ENVIRONMENT: 'Development',
-              ASPNETCORE_URLS: 'http://0.0.0.0:2999'
+              ASPNETCORE_URLS: 'http://0.0.0.0:2999',
             }),
           };
           cp.spawn('dotnet', ['watch', 'run'], options).stdout.on('data', data => {

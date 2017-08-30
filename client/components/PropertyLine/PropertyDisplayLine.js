@@ -8,6 +8,7 @@
  */
 
 import React, { PropTypes } from 'react';
+import s from './PropertyLine.css';
 
 class PropertyDisplayLine extends React.Component {
 
@@ -15,10 +16,27 @@ class PropertyDisplayLine extends React.Component {
     Id: PropTypes.string.isRequired,
     Text: PropTypes.string.isRequired,
     DisplayAmountFlag: PropTypes.bool.isRequired,
-    Amount: PropTypes.number.isRequired,
+    Amount: PropTypes.number,
     IsAmountCalculated: PropTypes.bool.isRequired,
+    Message: PropTypes.string.isRequired,
     handleChange: PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputValue: props.Amount,
+    };
+    this.handleOnChange = this.handleOnChange.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ inputValue: nextProps.Amount });
+  }
+
+  handleOnChange(e) {
+    this.setState({ inputValue: e.target.value });
+  }
 
   render() {
     if (!(this.props.Text && this.props.Text.trim().length)) {
@@ -28,10 +46,11 @@ class PropertyDisplayLine extends React.Component {
       const amountElement = this.props.IsAmountCalculated ?
         (<span> {this.props.Amount} </span>) :
         (<input
-          defaultValue={this.props.Amount}
+          value={this.state.inputValue}
+          onChange={this.handleOnChange}
           onBlur={(e) => { this.props.handleChange(e, this.props.Id); }}
         />);
-      return (<div> {this.props.Text} {amountElement} </div>);
+      return (<div> {this.props.Text} {amountElement} <span className={s.error}>{this.props.Message}</span></div>);
     }
     return (<div> {this.props.Text} </div>);
   }

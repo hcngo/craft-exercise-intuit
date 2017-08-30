@@ -64,6 +64,7 @@ namespace Server.ApplicationServices
         } else {
 
         }
+        line.Message = "";
       }
     }
 }
