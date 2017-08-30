@@ -10,6 +10,7 @@
 import React, { PropTypes } from 'react';
 import { AMOUNTLOCATION } from '../../utils/consts';
 import PropertyDisplayLine from './PropertyDisplayLine';
+import s from './PropertyLine.css';
 
 class PropertyLine extends React.Component {
 
@@ -26,23 +27,27 @@ class PropertyLine extends React.Component {
 
   render() {
     return (
-      <li>
-        <PropertyDisplayLine
-          Text={this.props.Header}
-          DisplayAmountFlag={this.props.AmountPos === AMOUNTLOCATION.Header}
-          {...this.props}
-        />
-        <ul>
-          {this.props.Sublines.map(subLine =>
-            <PropertyLine key={subLine.Id} {...subLine} handleChange={this.props.handleChange} />,
-          )}
-        </ul>
-        <PropertyDisplayLine
-          Text={this.props.Footer}
-          DisplayAmountFlag={this.props.AmountPos === AMOUNTLOCATION.Footer}
-          {...this.props}
-        />
-      </li>
+      <tr>
+        <td className={s.tableData}>
+          <PropertyDisplayLine
+            Text={this.props.Header}
+            DisplayAmountFlag={this.props.AmountPos === AMOUNTLOCATION.Header}
+            {...this.props}
+          />
+          <table className={s.lineTable}>
+            <tbody>
+              {this.props.Sublines.map(subLine =>
+                <PropertyLine key={subLine.Id} {...subLine} handleChange={this.props.handleChange} />,
+              )}
+            </tbody>
+          </table>
+          <PropertyDisplayLine
+            Text={this.props.Footer}
+            DisplayAmountFlag={this.props.AmountPos === AMOUNTLOCATION.Footer}
+            {...this.props}
+          />
+        </td>
+      </tr>
     );
   }
 }

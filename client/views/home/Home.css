@@ -5,3 +5,9 @@
 .success {
   color: green;
 }
+
+.lineTable {
+  table-layout: fixed;
+  width: 1000px;
+}
+

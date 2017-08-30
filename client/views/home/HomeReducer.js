@@ -30,7 +30,13 @@ function dispatch(action) {
       const nLevel = parseInt(level, 10);
       theLine = theLine.Sublines[nLevel - 1];
     });
-    theLine.Amount = filterFloat(action.value);
+    const newVal = filterFloat(action.value);
+    if (filterFloat(theLine.Amount) === newVal) {
+      self.setState(prevState => homeReducer(prevState, { type: 'REPLACE', dataStore: prevState.dataStore }));
+      return;
+    }
+
+    theLine.Amount = newVal;
 
     fetch(POST_NET_WORTH_URL, {
       method: 'POST',

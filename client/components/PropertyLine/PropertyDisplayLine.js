@@ -8,7 +8,9 @@
  */
 
 import React, { PropTypes } from 'react';
+import classnames from 'classnames';
 import s from './PropertyLine.css';
+
 
 class PropertyDisplayLine extends React.Component {
 
@@ -18,6 +20,7 @@ class PropertyDisplayLine extends React.Component {
     DisplayAmountFlag: PropTypes.bool.isRequired,
     Amount: PropTypes.number,
     IsAmountCalculated: PropTypes.bool.isRequired,
+    Sublines: PropTypes.array,
     Message: PropTypes.string.isRequired,
     handleChange: PropTypes.func.isRequired,
   };
@@ -26,22 +29,32 @@ class PropertyDisplayLine extends React.Component {
     super(props);
     this.state = {
       inputValue: props.Amount,
+      prevValue: props.Amount,
     };
     this.handleOnChange = this.handleOnChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ inputValue: nextProps.Amount });
+    this.setState({ inputValue: nextProps.Amount || this.state.prevValue });
   }
 
   handleOnChange(e) {
-    this.setState({ inputValue: e.target.value });
+    this.setState({ inputValue: e.target.value, prevValue: e.target.value });
   }
 
   render() {
     if (!(this.props.Text && this.props.Text.trim().length)) {
-      return (<span />);
+      return (<table className={s.lineTable}>
+        <tbody>
+          <tr>
+            <td className={s.tableData} />
+            <td className={s.tableData} />
+            <td className={s.tableData} />
+          </tr>
+        </tbody>
+      </table>);
     }
+    const nodeClass = this.props.Sublines.length !== 0 ? s.internalNode : s.leafNode;
     if (this.props.DisplayAmountFlag) {
       const amountElement = this.props.IsAmountCalculated ?
         (<span> {this.props.Amount} </span>) :
@@ -50,9 +63,25 @@ class PropertyDisplayLine extends React.Component {
           onChange={this.handleOnChange}
           onBlur={(e) => { this.props.handleChange(e, this.props.Id); }}
         />);
-      return (<div> {this.props.Text} {amountElement} <span className={s.error}>{this.props.Message}</span></div>);
+      return (<table className={classnames(s.lineTableWithBottom, nodeClass)}>
+        <tbody>
+          <tr>
+            <td className={s.tableData}>{this.props.Text}</td>
+            <td className={s.tableData}>{amountElement}</td>
+            <td className={s.tableData}><span className={s.error}>{this.props.Message}</span></td>
+          </tr>
+        </tbody>
+      </table>);
     }
-    return (<div> {this.props.Text} </div>);
+    return (<table className={classnames(s.lineTableWithBottom, nodeClass)}>
+      <tbody>
+        <tr>
+          <td className={s.tableData}>{this.props.Text}</td>
+          <td className={s.tableData} />
+          <td className={s.tableData} />
+        </tr>
+      </tbody>
+    </table>);
   }
 }
 

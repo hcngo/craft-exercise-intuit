@@ -51,11 +51,13 @@ class Home extends React.Component {
         <p>
           <span className={this.state.dataStore.Result.Item1 ? s.success : s.error}>{this.state.dataStore.Result.Item2}</span>
         </p>
-        <ul>
-          {this.state.dataStore.Items.map(propLine =>
-            <PropertyLine key={propLine.Id} {...propLine} handleChange={this.handleChange} />,
-          )}
-        </ul>
+        <table className={s.lineTable}>
+          <tbody>
+            {this.state.dataStore.Items.map(propLine =>
+              <PropertyLine key={propLine.Id} {...propLine} handleChange={this.handleChange} />,
+            )}
+          </tbody>
+        </table>
       </Layout>
     );
   }
