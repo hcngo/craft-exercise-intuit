@@ -26,6 +26,7 @@ class PropertyDisplayLine extends React.Component {
     editMode: PropTypes.bool.isRequired,
     handleChange: PropTypes.func.isRequired,
     handleRemove: PropTypes.func.isRequired,
+    handleAdd: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -64,7 +65,7 @@ class PropertyDisplayLine extends React.Component {
       return (<table className={classnames(s.lineTableWithBottom, nodeClass)}>
         <tbody>
           <tr>
-            {this.props.editMode && <td className={s.tableData}><PropertyAction Id={this.props.Id} handleRemove={this.props.handleRemove} /></td>}
+            {this.props.editMode && <td className={s.tableData}><PropertyAction {...this.props} /></td>}
             <td className={s.tableData}>{this.props.Text}</td>
             <td className={s.tableData} />
             <td className={s.tableData} />
@@ -83,7 +84,7 @@ class PropertyDisplayLine extends React.Component {
     return (<table className={classnames(s.lineTableWithBottom, nodeClass)}>
       <tbody>
         <tr>
-        {this.props.editMode && <td className={s.tableData}><PropertyAction Id={this.props.Id} handleRemove={this.props.handleRemove} /></td>}
+        {this.props.editMode && <td className={s.tableData}><PropertyAction {...this.props} /></td>}
           <td className={s.tableData}>{this.props.Text}</td>
           <td className={s.tableData}>{amountElement}</td>
           <td className={s.tableData}><span className={s.error}>{this.props.Message}</span></td>

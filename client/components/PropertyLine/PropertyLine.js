@@ -25,6 +25,7 @@ class PropertyLine extends React.Component {
     editMode: PropTypes.bool.isRequired,
     handleChange: PropTypes.func.isRequired,
     handleRemove: PropTypes.func.isRequired,
+    handleAdd: PropTypes.func.isRequired,
   };
 
   render() {
@@ -39,7 +40,7 @@ class PropertyLine extends React.Component {
           <table className={s.lineTable}>
             <tbody>
               {this.props.Sublines.map(subLine =>
-                <PropertyLine editMode={this.props.editMode} key={subLine.Id} {...subLine} handleChange={this.props.handleChange} handleRemove={this.props.handleRemove} />,
+                <PropertyLine editMode={this.props.editMode} key={subLine.Id} {...subLine} handleChange={this.props.handleChange} handleRemove={this.props.handleRemove} handleAdd={this.props.handleAdd}/>,
               )}
             </tbody>
           </table>

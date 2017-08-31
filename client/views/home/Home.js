@@ -35,10 +35,16 @@ class Home extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
   }
 
   componentDidMount() {
     document.title = title;
+  }
+
+  handleAdd(e, lineId, actionType) {
+    const action = { type: actionType, lineId };
+    dispatch.call(this, action);
   }
 
   handleRemove(e, lineId) {
@@ -84,7 +90,7 @@ class Home extends React.Component {
         <table className={s.lineTable}>
           <tbody>
             {this.state.dataStore.Items.map(propLine =>
-              <PropertyLine key={propLine.Id} editMode={this.state.editMode} {...propLine} handleChange={this.handleChange} handleRemove={this.handleRemove} />,
+              <PropertyLine key={propLine.Id} editMode={this.state.editMode} {...propLine} handleChange={this.handleChange} handleRemove={this.handleRemove} handleAdd={this.handleAdd}/>,
             )}
           </tbody>
         </table>

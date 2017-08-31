@@ -46,12 +46,29 @@ const homeReducer = (state, action) => {
       newState = action.component.snapShot;
       action.component.snapShot = null;
       break;
-    case 'REMOVEITEM':
+    case 'ADDLINE':
+      newState = deepClone(state);
+      const { item } = findTheLine(action.lineId, newState);
+      const newLine = {
+        Id: `${item.Id}.${item.Sublines.length + 1}`,
+        AmountOperand: 1,
+        Header: 'New Item',
+        Footer: '',
+        Amount: 0,
+        IsAmountCalculated: false,
+        AmountPos: 1,
+        Sublines: [],
+        Message: '',
+      };
+      item.Sublines.push(newLine);
+      break;
+    case 'REMOVEITEM': {
       newState = deepClone(state);
       const { item, parent } = findTheLine(action.lineId, newState);
       parent.Sublines.splice(parent.Sublines.indexOf(item), 1);
       reIndex(parent);
       break;
+    }
     case 'LOCALSUBMIT': {
       newState = deepClone(state);
       const theLine = findTheLine(action.lineId, newState).item;

@@ -16,6 +16,8 @@ class PropertyAction extends React.Component {
   static propTypes = {
     Id: PropTypes.string.isRequired,
     handleRemove: PropTypes.func.isRequired,
+    handleAdd: PropTypes.func.isRequired,
+    IsAmountCalculated: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -23,8 +25,8 @@ class PropertyAction extends React.Component {
   }
 
   render() {
-    const addSectionBtn = (<Button onClick={(e) => { }}>Add Section</Button>);
-    const addLineBtn = (<Button onClick={(e) => { }}>Add Line</Button>);
+    const addSectionBtn = (<Button disabled={!this.props.IsAmountCalculated} onClick={(e) => { this.props.handleAdd(e, this.props.Id, 'ADDSECTION'); }}>Add Section</Button>);
+    const addLineBtn = (<Button disabled={!this.props.IsAmountCalculated} onClick={(e) => { this.props.handleAdd(e, this.props.Id, 'ADDLINE'); }}>Add Line</Button>);
     const removeBtn = (<Button onClick={(e) => { this.props.handleRemove(e, this.props.Id); }}>Remove</Button>);
     return <span>{addSectionBtn} {addLineBtn} {removeBtn} </span>;
   }
