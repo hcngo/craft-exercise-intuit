@@ -9,8 +9,9 @@
 
 .content {
   width: 100%;
-  max-width: 1500px;
-  margin: 0 auto;
+  /* max-width: 1500px; */
+  margin: 20px 50px auto 50px;
+  /* overflow: scroll; */
 }
 
 .ribbon {

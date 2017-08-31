@@ -27,26 +27,33 @@ class Home extends React.Component {
 
   constructor(props) {
     super(props);
+    this.snapShot = null;
     this.state = {
       dataStore: props.dataStore,
       editMode: false,
-      snapShot: null,
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleEditClick = this.handleButtonClick.bind(this);
+    this.handleButtonClick = this.handleButtonClick.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
   }
 
   componentDidMount() {
     document.title = title;
   }
 
+  handleRemove(e, lineId) {
+    const action = { type: 'REMOVEITEM', lineId };
+    dispatch.call(this, action);
+  }
+
   handleChange(e, lineId) {
-    const action = { type: 'SUBMIT', lineId, value: e.target.value };
+    const type = this.state.editMode ? 'LOCALSUBMIT' : 'SUBMIT';
+    const action = { type, lineId, value: e.target.value };
     dispatch.call(this, action);
   }
 
   handleButtonClick(e, type) {
-    const action = { type };
+    const action = { type, component: this };
     dispatch.call(this, action);
     e.preventDefault();
   }
@@ -64,11 +71,11 @@ class Home extends React.Component {
         <div>
           { this.state.editMode ?
             (<span>
-              <Button onClick={(e) => { this.handleEditClick(e, 'SAVE'); }}>Save</Button>
-              <Button onClick={(e) => { this.handleEditClick(e, 'CANCEL'); }}>Cancel</Button>
+              <Button onClick={(e) => { this.handleButtonClick(e, 'SAVE'); }}>Save</Button>
+              <Button onClick={(e) => { this.handleButtonClick(e, 'CANCEL'); }}>Cancel</Button>
             </span>) :
             (<Button
-              onClick={(e) => { this.handleEditClick(e, 'EDIT'); }}
+              onClick={(e) => { this.handleButtonClick(e, 'EDIT'); }}
             >
               Edit
             </Button>)
@@ -77,7 +84,7 @@ class Home extends React.Component {
         <table className={s.lineTable}>
           <tbody>
             {this.state.dataStore.Items.map(propLine =>
-              <PropertyLine key={propLine.Id} {...propLine} handleChange={this.handleChange} />,
+              <PropertyLine key={propLine.Id} editMode={this.state.editMode} {...propLine} handleChange={this.handleChange} handleRemove={this.handleRemove} />,
             )}
           </tbody>
         </table>

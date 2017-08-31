@@ -10,6 +10,7 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 import s from './PropertyLine.css';
+import PropertyAction from './PropertyAction';
 
 
 class PropertyDisplayLine extends React.Component {
@@ -22,7 +23,9 @@ class PropertyDisplayLine extends React.Component {
     IsAmountCalculated: PropTypes.bool.isRequired,
     Sublines: PropTypes.array,
     Message: PropTypes.string.isRequired,
+    editMode: PropTypes.bool.isRequired,
     handleChange: PropTypes.func.isRequired,
+    handleRemove: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -47,6 +50,7 @@ class PropertyDisplayLine extends React.Component {
       return (<table className={s.lineTable}>
         <tbody>
           <tr>
+            {this.props.editMode && <td className={s.tableData} />}
             <td className={s.tableData} />
             <td className={s.tableData} />
             <td className={s.tableData} />
@@ -54,31 +58,35 @@ class PropertyDisplayLine extends React.Component {
         </tbody>
       </table>);
     }
+
     const nodeClass = this.props.Sublines.length !== 0 ? s.internalNode : s.leafNode;
-    if (this.props.DisplayAmountFlag) {
-      const amountElement = this.props.IsAmountCalculated ?
-        (<span> {this.props.Amount} </span>) :
-        (<input
-          value={this.state.inputValue}
-          onChange={this.handleOnChange}
-          onBlur={(e) => { this.props.handleChange(e, this.props.Id); }}
-        />);
+    if (!this.props.DisplayAmountFlag) {
       return (<table className={classnames(s.lineTableWithBottom, nodeClass)}>
         <tbody>
           <tr>
+            {this.props.editMode && <td className={s.tableData}><PropertyAction Id={this.props.Id} handleRemove={this.props.handleRemove} /></td>}
             <td className={s.tableData}>{this.props.Text}</td>
-            <td className={s.tableData}>{amountElement}</td>
-            <td className={s.tableData}><span className={s.error}>{this.props.Message}</span></td>
+            <td className={s.tableData} />
+            <td className={s.tableData} />
           </tr>
         </tbody>
       </table>);
     }
+
+    const amountElement = this.props.IsAmountCalculated ?
+      (<span> {this.props.Amount} </span>) :
+      (<input
+        value={this.state.inputValue}
+        onChange={this.handleOnChange}
+        onBlur={(e) => { this.props.handleChange(e, this.props.Id); }}
+      />);
     return (<table className={classnames(s.lineTableWithBottom, nodeClass)}>
       <tbody>
         <tr>
+        {this.props.editMode && <td className={s.tableData}><PropertyAction Id={this.props.Id} handleRemove={this.props.handleRemove} /></td>}
           <td className={s.tableData}>{this.props.Text}</td>
-          <td className={s.tableData} />
-          <td className={s.tableData} />
+          <td className={s.tableData}>{amountElement}</td>
+          <td className={s.tableData}><span className={s.error}>{this.props.Message}</span></td>
         </tr>
       </tbody>
     </table>);
