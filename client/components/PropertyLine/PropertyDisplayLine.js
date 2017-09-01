@@ -11,11 +11,12 @@ import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 import s from './PropertyLine.css';
 import PropertyAction from './PropertyAction';
-
+import ExpandCollapseAction from './ExpandCollapseAction';
 
 class PropertyDisplayLine extends React.Component {
 
   static propTypes = {
+    ExpansionMode: PropTypes.bool,
     Id: PropTypes.string.isRequired,
     Text: PropTypes.string.isRequired,
     TextLocation: PropTypes.string.isRequired,
@@ -28,7 +29,12 @@ class PropertyDisplayLine extends React.Component {
     handleChange: PropTypes.func.isRequired,
     handleRemove: PropTypes.func.isRequired,
     handleAdd: PropTypes.func.isRequired,
+    handleExpandCollapseBtnClick: PropTypes.func.isRequired,
   };
+
+  static defaultProps = {
+    ExpansionMode: null,
+  }
 
   constructor(props) {
     super(props);
@@ -58,14 +64,20 @@ class PropertyDisplayLine extends React.Component {
       return null;
     }
 
+    const expandBtn = this.props.ExpansionMode != null && this.props.Sublines.length !== 0 ?
+    (<ExpandCollapseAction Text={this.props.ExpansionMode ? '>>' : '<<'} handleClick={this.props.handleExpandCollapseBtnClick} />) :
+    null;
     const nodeClass = this.props.IsAmountCalculated ? s.internalNode : s.leafNode;
     const textElement = this.props.editMode ?
-    (<input
-      value={this.state.inputText}
-      onChange={this.handleOnChangeText}
-      onBlur={(e) => { this.props.handleChange(e, this.props.Id, 'TEXT', this.props.TextLocation); }}
-    />) :
-    (<span> {this.state.inputText} </span>);
+    (<span>
+      {expandBtn}
+      <input
+        value={this.state.inputText}
+        onChange={this.handleOnChangeText}
+        onBlur={(e) => { this.props.handleChange(e, this.props.Id, 'TEXT', this.props.TextLocation); }}
+      />
+    </span>) :
+    (<span>{expandBtn} {this.state.inputText} </span>);
 
     if (!this.props.DisplayAmountFlag) {
       return (<table className={classnames(s.lineTableWithBottom, nodeClass)}>

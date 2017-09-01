@@ -28,17 +28,32 @@ class PropertyLine extends React.Component {
     handleAdd: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      expansionMode: true,
+    };
+    this.handleExpandCollapseBtnClick = this.handleExpandCollapseBtnClick.bind(this);
+  }
+
+  handleExpandCollapseBtnClick(e) {
+    this.setState({ expansionMode: !this.state.expansionMode });
+    e.preventDefault();
+  }
+
   render() {
     return (
       <tr>
         <td className={s.tableData}>
           <PropertyDisplayLine
+            ExpansionMode={this.state.expansionMode}
             Text={this.props.Header}
             TextLocation={'HEADER'}
             DisplayAmountFlag={this.props.AmountPos === AMOUNTLOCATION.Header}
+            handleExpandCollapseBtnClick={this.handleExpandCollapseBtnClick}
             {...this.props}
           />
-          <table className={s.lineTable}>
+          <table className={s.lineTable} style={{ display: this.state.expansionMode ? '' : 'none' }}>
             <tbody>
               {this.props.Sublines.map(subLine =>
                 <PropertyLine editMode={this.props.editMode} key={subLine.Id} {...subLine} handleChange={this.props.handleChange} handleRemove={this.props.handleRemove} handleAdd={this.props.handleAdd}/>,
@@ -49,6 +64,7 @@ class PropertyLine extends React.Component {
             Text={this.props.Footer}
             TextLocation={'FOOTER'}
             DisplayAmountFlag={this.props.AmountPos === AMOUNTLOCATION.Footer}
+            handleExpandCollapseBtnClick={this.handleExpandCollapseBtnClick}
             {...this.props}
           />
         </td>
