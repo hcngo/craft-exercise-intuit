@@ -65,7 +65,7 @@ class PropertyDisplayLine extends React.Component {
     }
 
     const expandBtn = this.props.ExpansionMode != null && this.props.Sublines.length !== 0 ?
-    (<ExpandCollapseAction Text={this.props.ExpansionMode ? '>>' : '<<'} handleClick={this.props.handleExpandCollapseBtnClick} />) :
+    (<ExpandCollapseAction Text={this.props.ExpansionMode ? 'v' : '>'} handleClick={this.props.handleExpandCollapseBtnClick} />) :
     null;
     const nodeClass = this.props.IsAmountCalculated ? s.internalNode : s.leafNode;
     const textElement = this.props.editMode ?
