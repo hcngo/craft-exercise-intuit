@@ -24,6 +24,20 @@ const reIndex = (topItem) => {
   });
 };
 
+const createNewItem = (parent, type) => (
+  {
+    Id: `${parent.Id}.${parent.Sublines.length + 1}`,
+    AmountOperand: 1,
+    Header: 'New Item',
+    Footer: '',
+    Amount: 0,
+    IsAmountCalculated: type === 'ADDLINE' ? false : type === 'ADDSECTION',
+    AmountPos: 1,
+    Sublines: [],
+    Message: '',
+  }
+);
+
 const homeReducer = (state, action) => {
   let newState;
   switch (action.type) {
@@ -47,21 +61,13 @@ const homeReducer = (state, action) => {
       action.component.snapShot = null;
       break;
     case 'ADDLINE':
+    case 'ADDSECTION': {
       newState = deepClone(state);
       const { item } = findTheLine(action.lineId, newState);
-      const newLine = {
-        Id: `${item.Id}.${item.Sublines.length + 1}`,
-        AmountOperand: 1,
-        Header: 'New Item',
-        Footer: '',
-        Amount: 0,
-        IsAmountCalculated: false,
-        AmountPos: 1,
-        Sublines: [],
-        Message: '',
-      };
+      const newLine = createNewItem(item, action.type);
       item.Sublines.push(newLine);
       break;
+    }
     case 'REMOVEITEM': {
       newState = deepClone(state);
       const { item, parent } = findTheLine(action.lineId, newState);
@@ -72,9 +78,18 @@ const homeReducer = (state, action) => {
     case 'LOCALSUBMIT': {
       newState = deepClone(state);
       const theLine = findTheLine(action.lineId, newState).item;
-      const newVal = filterFloat(action.value);
-      if (filterFloat(theLine.Amount) !== newVal) {
-        theLine.Amount = newVal;
+      if (action.changeType === 'VALUE') {
+        const newVal = filterFloat(action.value);
+        if (filterFloat(theLine.Amount) !== newVal) {
+          theLine.Amount = newVal;
+        }
+      }
+      if (action.changeType === 'TEXT') {
+        if (action.textLocation === 'HEADER') {
+          theLine.Header = action.value;
+        } else if (action.textLocation === 'FOOTER') {
+          theLine.Footer = action.value;
+        }
       }
       break;
     }
@@ -90,13 +105,22 @@ function dispatch(action) {
   if (action.type === 'SUBMIT') {
     const newState = deepClone(this.state);
     const theLine = findTheLine(action.lineId, newState).item;
-    const newVal = filterFloat(action.value);
-    if (filterFloat(theLine.Amount) === newVal) {
-      self.setState(prevState => homeReducer(prevState, { type: 'REPLACE', dataStore: prevState.dataStore }));
+    if (action.changeType === 'VALUE') {
+      const newVal = filterFloat(action.value);
+      if (filterFloat(theLine.Amount) === newVal) {
+        self.setState(prevState => homeReducer(prevState, { type: 'REPLACE', dataStore: prevState.dataStore }));
+        return;
+      }
+      theLine.Amount = newVal;
+    } else if (action.changeType === 'TEXT') {
+      if (action.textLocation === 'HEADER') {
+        theLine.Header = action.value;
+      } else if (action.textLocation === 'FOOTER') {
+        theLine.Footer = action.value;
+      }
+    } else {
       return;
     }
-
-    theLine.Amount = newVal;
 
     fetch(POST_NET_WORTH_URL, {
       method: 'POST',

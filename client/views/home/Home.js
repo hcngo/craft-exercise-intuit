@@ -52,9 +52,9 @@ class Home extends React.Component {
     dispatch.call(this, action);
   }
 
-  handleChange(e, lineId) {
+  handleChange(e, lineId, changeType, textLocation) {
     const type = this.state.editMode ? 'LOCALSUBMIT' : 'SUBMIT';
-    const action = { type, lineId, value: e.target.value };
+    const action = { type, lineId, value: e.target.value, changeType, textLocation };
     dispatch.call(this, action);
   }
 
@@ -83,7 +83,7 @@ class Home extends React.Component {
             (<Button
               onClick={(e) => { this.handleButtonClick(e, 'EDIT'); }}
             >
-              Edit
+              Edit Layout
             </Button>)
           }
         </div>

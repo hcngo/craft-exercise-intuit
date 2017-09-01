@@ -29,7 +29,7 @@ class Button extends React.Component {
     return (
       <button
         ref={node => { this.root = node; }}
-        className={cx('mdl-button mdl-js-button', className)} {...other}
+        className={cx('mdl-button--raised mdl-js-button', className)} {...other}
       />
     );
   }

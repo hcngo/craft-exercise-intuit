@@ -18,6 +18,7 @@ class PropertyDisplayLine extends React.Component {
   static propTypes = {
     Id: PropTypes.string.isRequired,
     Text: PropTypes.string.isRequired,
+    TextLocation: PropTypes.string.isRequired,
     DisplayAmountFlag: PropTypes.bool.isRequired,
     Amount: PropTypes.number,
     IsAmountCalculated: PropTypes.bool.isRequired,
@@ -33,40 +34,45 @@ class PropertyDisplayLine extends React.Component {
     super(props);
     this.state = {
       inputValue: props.Amount,
+      inputText: props.Text,
       prevValue: props.Amount,
     };
-    this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnChangeValue = this.handleOnChangeValue.bind(this);
+    this.handleOnChangeText = this.handleOnChangeText.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ inputValue: nextProps.Amount || this.state.prevValue });
+    this.setState({ inputValue: nextProps.Amount || this.state.prevValue, inputText: nextProps.Text });
   }
 
-  handleOnChange(e) {
+  handleOnChangeValue(e) {
     this.setState({ inputValue: e.target.value, prevValue: e.target.value });
+  }
+
+  handleOnChangeText(e) {
+    this.setState({ inputText: e.target.value });
   }
 
   render() {
     if (!(this.props.Text && this.props.Text.trim().length)) {
-      return (<table className={s.lineTable}>
-        <tbody>
-          <tr>
-            {this.props.editMode && <td className={s.tableData} />}
-            <td className={s.tableData} />
-            <td className={s.tableData} />
-            <td className={s.tableData} />
-          </tr>
-        </tbody>
-      </table>);
+      return null;
     }
 
-    const nodeClass = this.props.Sublines.length !== 0 ? s.internalNode : s.leafNode;
+    const nodeClass = this.props.IsAmountCalculated ? s.internalNode : s.leafNode;
+    const textElement = this.props.editMode ?
+    (<input
+      value={this.state.inputText}
+      onChange={this.handleOnChangeText}
+      onBlur={(e) => { this.props.handleChange(e, this.props.Id, 'TEXT', this.props.TextLocation); }}
+    />) :
+    (<span> {this.state.inputText} </span>);
+
     if (!this.props.DisplayAmountFlag) {
       return (<table className={classnames(s.lineTableWithBottom, nodeClass)}>
         <tbody>
           <tr>
             {this.props.editMode && <td className={s.tableData}><PropertyAction {...this.props} /></td>}
-            <td className={s.tableData}>{this.props.Text}</td>
+            <td className={classnames(s.tableData, nodeClass)}>{textElement}</td>
             <td className={s.tableData} />
             <td className={s.tableData} />
           </tr>
@@ -74,18 +80,18 @@ class PropertyDisplayLine extends React.Component {
       </table>);
     }
 
-    const amountElement = this.props.IsAmountCalculated ?
+    const amountElement = this.props.IsAmountCalculated || this.props.editMode ?
       (<span> {this.props.Amount} </span>) :
       (<input
         value={this.state.inputValue}
-        onChange={this.handleOnChange}
-        onBlur={(e) => { this.props.handleChange(e, this.props.Id); }}
+        onChange={this.handleOnChangeValue}
+        onBlur={(e) => { this.props.handleChange(e, this.props.Id, 'VALUE'); }}
       />);
     return (<table className={classnames(s.lineTableWithBottom, nodeClass)}>
       <tbody>
         <tr>
         {this.props.editMode && <td className={s.tableData}><PropertyAction {...this.props} /></td>}
-          <td className={s.tableData}>{this.props.Text}</td>
+          <td className={s.tableData}>{textElement}</td>
           <td className={s.tableData}>{amountElement}</td>
           <td className={s.tableData}><span className={s.error}>{this.props.Message}</span></td>
         </tr>

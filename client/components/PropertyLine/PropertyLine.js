@@ -34,6 +34,7 @@ class PropertyLine extends React.Component {
         <td className={s.tableData}>
           <PropertyDisplayLine
             Text={this.props.Header}
+            TextLocation={'HEADER'}
             DisplayAmountFlag={this.props.AmountPos === AMOUNTLOCATION.Header}
             {...this.props}
           />
@@ -46,6 +47,7 @@ class PropertyLine extends React.Component {
           </table>
           <PropertyDisplayLine
             Text={this.props.Footer}
+            TextLocation={'FOOTER'}
             DisplayAmountFlag={this.props.AmountPos === AMOUNTLOCATION.Footer}
             {...this.props}
           />
