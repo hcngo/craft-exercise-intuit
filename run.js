@@ -151,27 +151,27 @@ tasks.set('publish', () => {
 tasks.set('start', () => {
   global.HMR = !process.argv.includes('--no-hmr'); // Hot Module Replacement (HMR)
   return Promise.resolve()
-    .then(() => run('clean'))
-    .then(() => run('appsettings'))
+//     .then(() => run('clean'))
+//     .then(() => run('appsettings'))
     .then(() => new Promise(resolve => {
       let count = 0;
-      const webpackConfig = require('./webpack.config');
-      const compiler = webpack(webpackConfig);
-      // Node.js middleware that compiles application in watch mode with HMR support
-      // http://webpack.github.io/docs/webpack-dev-middleware.html
-      const webpackDevMiddleware = require('webpack-dev-middleware')(compiler, {
-        publicPath: webpackConfig.output.publicPath,
-        stats: webpackConfig.stats,
-      });
-      compiler.plugin('done', () => {
+//       const webpackConfig = require('./webpack.config');
+//       const compiler = webpack(webpackConfig);
+//       // Node.js middleware that compiles application in watch mode with HMR support
+//       // http://webpack.github.io/docs/webpack-dev-middleware.html
+//       const webpackDevMiddleware = require('webpack-dev-middleware')(compiler, {
+//         publicPath: webpackConfig.output.publicPath,
+//         stats: webpackConfig.stats,
+//       });
+//       compiler.plugin('done', () => {
         // Launch ASP.NET Core server after the initial bundling is complete
         if (++count === 1) {
           const options = {
             cwd: path.resolve(__dirname, './server/'),
             stdio: ['ignore', 'pipe', 'inherit'],
             env: Object.assign({}, process.env, {
-              ASPNETCORE_ENVIRONMENT: 'Development',
-              ASPNETCORE_URLS: 'http://127.0.0.1:2999',
+              ASPNETCORE_ENVIRONMENT: 'Production',
+              ASPNETCORE_URLS: 'http://0.0.0.0:3000',
             }),
           };
           cp.spawn('dotnet', ['watch', 'run'], options).stdout.on('data', data => {
@@ -179,19 +179,19 @@ tasks.set('start', () => {
             if (data.indexOf('Application started.') !== -1) {
               // Launch Browsersync after the initial bundling is complete
               // For more information visit https://browsersync.io/docs/options
-              require('browser-sync').create().init({
-                proxy: {
-                  target: 'http://127.0.0.1:2999',
-                  middleware: [
-                    webpackDevMiddleware,
-                    require('webpack-hot-middleware')(compiler),
-                  ],
-                },
-              }, resolve);
+//               require('browser-sync').create().init({
+//                 proxy: {
+//                   target: 'http://0.0.0.0:2999',
+//                   middleware: [
+//                     webpackDevMiddleware,
+//                     require('webpack-hot-middleware')(compiler),
+//                   ],
+//                 },
+//               }, resolve);
             }
           });
         }
-      });
+//       });
     }));
 });
 
