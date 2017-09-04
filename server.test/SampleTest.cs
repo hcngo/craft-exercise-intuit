@@ -23,11 +23,16 @@ namespace server.test
           var netWorthTrackingServ = new NetWorthTracking();
           var lines = netWorthTrackingServ.GetInitialData(config.GetSection("InitialData"));
           var newLines = netWorthTrackingServ.GetInitialData(config.GetSection("InitialData"));
-          netWorthTrackingServ.ProcessNewLines(newLines);
-          Assert.True(lines.Count == newLines.Count);
+          var netWorthDto = new NetWorthDto(){
+            Items = newLines,
+            Version = 1,
+            Result = new Tuple<bool,string>(true,"")
+          };
+          netWorthTrackingServ.ProcessNewLines(netWorthDto);
+          Assert.True(lines.Count == netWorthDto.Items.Count);
           var result = true;
           for(var i = 0; i < lines.Count; i++){
-              result = result && lines[i].Equals(newLines[i]);
+              result = result && lines[i].Equals(netWorthDto.Items[i]);
           }
           Assert.True(result);
         }
