@@ -112,6 +112,10 @@ tasks.set('publish', () => {
     name: 'azure1',
     url: 'https://hcngo1@intuitcraftexercise.scm.azurewebsites.net:443/intuitcraftexercise.git', // TODO: Update deployment URL
   };
+//   const remote = {
+//     name: 'azure2',
+//     url: 'https://hcngo1@intuitcraftexercise-horizontalscrollcraftexercise.scm.azurewebsites.net:443/intuitcraftexercise.git', // TODO: Update deployment URL
+//   };
   const opts = { cwd: path.resolve(__dirname, './build'), stdio: ['ignore', 'inherit', 'inherit'] };
   const git = (...args) => new Promise((resolve, reject) => {
     cp.spawn('git', args, opts).on('close', code => {
